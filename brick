@@ -1,0 +1,78 @@
+package jrJava.brickBuster;
+
+import java.awt.Color;
+import java.awt.Graphics2D;
+
+import resources.DrawingBoard;
+import resources.SoundPlayer;
+
+public class Brick {
+
+	private int x, y; //top-left corner
+	private int width;
+	private int height;
+	private Color color;
+	private boolean isLastOfColumn;
+	
+	
+	
+	public Brick(Color _color, int _width, int _height){
+		color = _color;
+		width = _width;
+		height = _height;
+		
+
+	}
+	
+	public void setPosition(int _x, int _y, boolean _isLastOfColumn){
+		x = _x;
+		y = _y;
+		isLastOfColumn = _isLastOfColumn;
+	}
+	
+	public boolean isHit(Ball ball){
+		
+		if(ball.getX()<x-ball.getRadius()||ball.getX()>x+width+ball.getRadius()){
+		
+		return false;
+	}
+		if(ball.getY()>y && ball.getY()<=y+height){
+			 
+			if(ball.getX() < x+width/2){
+				ball.setX(x-ball.getRadius());
+				
+			}
+			
+			else{
+				ball.setX(x+width+ball.getRadius());
+			}
+			
+			ball.setXSpeed(-ball.getXSpeed());
+			return true;
+			
+			
+		}
+		
+		if(isLastOfColumn){
+			
+			if(ball.getY()>= y+height && ball.getY()<= y+height +ball.getRadius()){
+				ball.setY(y+height +ball.getRadius());
+				ball.setYSpeed(Math.abs(ball.getYSpeed()));
+				
+				return true;
+		}
+			}
+		
+	return false;
+}
+	
+		public void draw(DrawingBoard board){
+			Graphics2D canvas = board.getCanvas();
+			canvas.setColor(color);
+			canvas.fillRect(x , y, width, height);
+			canvas.setColor(Color.pink);
+			canvas.drawRect(x , y, width, height);
+		}
+
+	}
+
