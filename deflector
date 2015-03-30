@@ -1,0 +1,137 @@
+package jrJava.brickBuster;
+
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.event.*;
+
+
+import resources.*;
+
+
+public class Deflector implements KeyListener, MouseListener, MouseMotionListener{
+		
+	
+	private int x = 100;
+	private int y= 615;//top-left corner coordinates
+	private int width = 100;
+	private int height = 15;
+	private Color color = Color.cyan;
+
+	private int lastX;
+	private Wall wall;
+	
+	public Deflector(int _x, int _y){
+		int x= _x;
+		int y= _y;
+	}
+	
+	public void setWall(Wall _wall){
+		wall= _wall;
+		
+	}
+	public int getX(){
+		return x;
+	}
+	public int getY(){
+		return y;
+	}
+	public int getWidth(){
+		return width;
+	}
+	public int getHeight(){
+		return height;
+	}
+	
+	public void respondToKeyOrMouseSomehowMagically(){
+		
+		// As Arrow-keys are pressed or mouse is dragged,
+		//change the x accordingly.
+		//But it should not go outside the wall.
+		
+	}
+	public void draw(DrawingBoard board){
+		Graphics2D canvas = board.getCanvas();
+		canvas.setColor(color);
+		canvas.fillRect(x , y, width, height);
+	}
+
+
+	public void mouseDragged(MouseEvent e) {
+		int currentX = e.getX();
+		int deltaX = currentX-lastX;
+		
+		x = x+deltaX;
+		
+		if(x<wall.getXLeft()){
+			x=wall.getXLeft();
+		}
+		
+		else if(x>wall.getXRight()-width){
+			x=wall.getXRight()-width;
+		}
+		
+		lastX = currentX;
+	}
+
+
+	public void mouseMoved(MouseEvent e) {
+		
+		
+	}	
+
+
+
+	public void mouseClicked(MouseEvent e) {
+		
+		
+	}
+
+
+	public void mousePressed(MouseEvent e) {
+		lastX=e.getX();
+	}
+
+
+	public void mouseReleased(MouseEvent e) {
+		
+		
+	}
+
+
+	public void mouseEntered(MouseEvent e) {
+		
+		
+	}
+
+
+	public void mouseExited(MouseEvent e) {
+		
+		
+	}
+	
+
+
+
+	public void keyTyped(KeyEvent e) {
+		
+	}
+
+
+	
+	public void keyPressed(KeyEvent e) {
+		int keyCode = e.getKeyCode();
+		if(keyCode == KeyEvent.VK_LEFT){
+			x = x-10;
+		}
+		
+		else if (keyCode==KeyEvent.VK_RIGHT){
+			x = x +10;
+		}
+	}
+
+
+	
+	public void keyReleased(KeyEvent e) {
+		
+	}
+}
