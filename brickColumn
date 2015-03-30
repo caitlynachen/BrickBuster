@@ -1,0 +1,77 @@
+package jrJava.brickBuster;
+
+import java.awt.Color;
+import java.util.ArrayList;
+
+import resources.*;
+
+public class BrickColumn {
+
+	private int x,y; //top-left corner
+	private ArrayList<Brick> bricks = new ArrayList<Brick>();
+	private int brickWidth = 100;
+	private int brickHeight = 20;
+	
+	
+	public BrickColumn(int _x, int _y, int numOfBricks){
+		x= _x;
+		y= _y;
+		
+		for( int i=0; i<numOfBricks; i++){
+			
+			int yellow = (int)(Math.random()*256);
+			int cyan = (int)(Math.random()*256);
+			int white = (int)(Math.random()*256);
+			Color aColor = new Color(yellow,cyan,white);
+			
+			Brick each = new Brick(aColor, brickWidth , brickHeight);
+			bricks.add(each);
+			
+		}
+		
+	}
+	
+	public boolean checkCollision(Ball ball){
+		
+		if(ball.getX()<x-ball.getRadius() || 
+		  ball.getX()>x+brickWidth+ball.getRadius() ||
+		  ball.getY() >y+brickHeight*bricks.size()+ball.getRadius()){
+			
+			return false;
+		}
+		  
+		for(int i=0; i<bricks.size();i++){
+			Brick each = bricks.get(i);
+			boolean hit = each.isHit(ball);
+			if(hit){
+				bricks.remove(i);
+				return true;
+			}
+		}
+		
+		
+		return false;
+	}
+	
+	public void draw(DrawingBoard board){
+		for(int i=0; i<bricks.size(); i++){
+			Brick each= bricks.get(i);
+			int yValue = y + i*brickHeight;
+			if (i==bricks.size()-1){
+				each.setPosition(x, yValue, true);
+			}
+			else{
+				each.setPosition(x, yValue, false);
+			}
+			
+			each.draw(board);
+		}
+	}
+	
+}
+
+
+
+
+
+
