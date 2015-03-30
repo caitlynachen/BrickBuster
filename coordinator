@@ -1,0 +1,83 @@
+package jrJava.brickBuster;
+
+import java.awt.Color;
+
+import resources.*;
+
+public class Coordinator {
+
+	public static void main(String[] args) {
+		
+		DrawingBoard board = new DrawingBoard(570,700);
+		Timer timer = new Timer();
+		
+		Ball ball1 = new Ball(300, 500, 7, -9, 10, Color.cyan);
+		Ball ball2 = new Ball(480,320,6,-6,10, Color.red);
+		Ball ball3 = new Ball(300,400,5,-7,10,Color.blue);
+		Ball ball4 = new Ball (200, 340, 6, -8, 10, Color.black);
+		
+		
+		Wall wall = new Wall();
+		Deflector deflector = new Deflector(80,610);
+	
+		
+		board.getJFrame().addKeyListener(deflector);
+		board.addMouseListener(deflector);
+		board.addMouseMotionListener(deflector);
+		
+		BrickColumn[] columns = new BrickColumn[5];
+		columns [0] = new BrickColumn(wall.getXLeft(), wall.getYTop(),20);
+		columns [1] = new BrickColumn(wall.getXLeft()+100, wall.getYTop(),5);
+		columns [2] = new BrickColumn(wall.getXLeft()+200, wall.getYTop(),15);
+		columns [3] = new BrickColumn(wall.getXLeft()+300, wall.getYTop(),8);
+		columns [4] = new BrickColumn(wall.getXLeft()+400, wall.getYTop(),15);
+		
+		ball1.setBrickColumn(columns);
+		ball1.setWall(wall);
+		ball1.setDeflector(deflector);
+		
+		ball2.setBrickColumn(columns);
+		ball2.setWall(wall);
+		ball2.setDeflector(deflector);
+		
+		ball3.setBrickColumn(columns);
+		ball3.setWall(wall);
+		ball3.setDeflector(deflector);
+		
+		ball4.setBrickColumn(columns);
+		ball4.setWall(wall);
+		ball4.setDeflector(deflector);
+		
+		deflector.setWall(wall);
+		
+		SoundPlayer bgSound = new SoundPlayer();
+		bgSound.load("soundDepot/jack_low.wav");
+		bgSound.playLoop();
+		
+		board.setBackgroundImage("ImageDepot/bg4.png");
+		
+		for (int i= 4; i <10000; i++){
+			board.clear();
+			
+			ball1.move();
+			ball1.draw(board);
+			ball2.move();
+			ball2.draw(board);
+			ball3.move();
+			ball3.draw(board);
+			ball4.move();
+			ball4.draw(board);
+			
+			wall.draw(board);
+			deflector.draw(board);
+			
+			for (int j=0; j<columns.length; j++){
+				columns[j].draw(board);
+			}
+			
+			board.repaint();
+			timer.pause(35);
+		}
+	}
+
+}
