@@ -1,0 +1,141 @@
+# BrickBuster
+package jrJava.brickBuster;
+
+import java.awt.Color;
+import java.awt.Graphics2D;
+
+import resources.*;
+
+public class Ball {
+	
+	private int x, y; //center coordinates
+	private int xSpeed, ySpeed;
+	private int radius;
+	private Color color;
+	private SoundPlayer sound;
+
+	private Deflector deflector;
+	private Wall wall;
+	private BrickColumn[] columns;
+	
+	
+
+		
+	
+	public Ball(int _x, int _y, int _xSpeed, int _ySpeed, int _radius, Color _color){
+		x = _x;
+		y = _y;
+		xSpeed= _xSpeed;
+		ySpeed = _ySpeed;
+		radius = _radius;
+		color = _color;
+		
+		sound = new SoundPlayer();
+	sound.load("soundDepot/Boing.wav");
+		
+	}
+	
+	public void setDeflector(Deflector _deflector){
+		deflector = _deflector;
+		
+	}
+	
+	public void setWall(Wall _wall){
+		wall = _wall;
+	}
+	
+	public void setBrickColumn(BrickColumn[] _columns){
+		columns = _columns;
+	}
+
+	public int getX(){
+		return x;
+	}
+	public int getY(){
+		return y;
+	}
+	public int getXSpeed(){
+		return xSpeed;
+	}
+	public int getYSpeed(){
+	return ySpeed;
+	}
+	public int getRadius(){
+		return radius;
+	}
+	public void setX(int _x){
+		x = _x;
+	}
+	public void setY(int _y){
+		y = _y;
+		
+	}
+	public void setXSpeed(int _xSpeed){
+		xSpeed = _xSpeed;
+		
+	}
+	public void setYSpeed(int _ySpeed){
+		ySpeed = _ySpeed;
+		
+	}
+	public void move(){
+		x = x+xSpeed;
+		y = y+ySpeed;
+	
+		
+		// check collision with BrickColumn. If detected,
+		//remove the brick, move up the bricks below, keep the ball at bay, change ball direction.
+		
+		for(int i=0; i<columns.length; i++){
+			boolean collided = columns[i].checkCollision(this);
+			if(collided){
+				
+				sound.play();
+				break;
+				
+			}
+			
+		
+	}
+		
+		//check collision with wall. If detected, keep the ball at bay, change ball direction.
+		if(x<=wall.getXLeft()+radius){
+			x=wall.getXLeft()+radius;
+			xSpeed = -xSpeed;
+			
+			
+		}
+		
+		if(x>=wall.getXRight()-radius){
+			x=wall.getXRight()-radius;
+			xSpeed = -xSpeed;
+			;
+			
+		}
+		
+		if(y<=wall.getYTop()+radius){
+			y=wall.getYTop()+radius;
+			ySpeed= -ySpeed;
+			
+		}
+		
+		//check collision with deflector. If detected,keep the ball at bay, change ball direction.
+		if(x>=deflector.getX()-radius &&
+		   x<=deflector.getX()+deflector.getWidth()+radius &&
+		   y>=deflector.getY()-radius &&
+		   y<=deflector.getY()+deflector.getHeight()){
+		
+			
+		 y=deflector.getY()-radius;
+			ySpeed=-ySpeed;
+			
+			
+		}
+	}
+	
+	public void draw(DrawingBoard board){
+		Graphics2D canvas = board.getCanvas();
+		canvas.setColor(color);
+		canvas.fillOval(x-radius, y-radius, 2*radius, 2*radius);
+	}
+}
